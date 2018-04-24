@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const AuthorListItem  = (props) =>  {
+const UserListItem  = (props) =>  {
   return (
     <tr>
       <td className="col-md-3">{props.fname}</td>
       <td className="col-md-3">{props.lname}</td>
       <td className="col-md-3">{props.email}</td>
       <td className="col-md-3 btn-toolbar">
-        <Link to={`/authors/${props.id}/posts`}>
+        <Link to={`/users/${props.id}/bugs`}>
         <button className="btn btn-success btn-sm">
-          <i className="glyphicon glyphicon-list"></i> Posts
+          <i className="glyphicon glyphicon-list"></i> Bugs
         </button>
       </Link>
       <button className="btn btn-success btn-sm" onClick={event => props.onEdit("edit",props)}>
@@ -24,15 +24,15 @@ const AuthorListItem  = (props) =>  {
 );
 }
 
-const AuthorList = (props) => {
-  const authorItems = props.authors.map((author)  => {
+const UserList = (props) => {
+  const userItems = props.users.map((user)  => {
     return (
-      <AuthorListItem
-        fname={author.fname}
-        lname={author.lname}
-        email={author.email}
-        id={author.id}
-        key={author.id}
+      <UserListItem
+        fname={user.fname}
+        lname={user.lname}
+        email={user.email}
+        id={user.id}
+        key={user.id}
         onDelete={props.onDelete}
         onEdit={props.onEdit}
       />
@@ -40,7 +40,7 @@ const AuthorList = (props) => {
   });
 
   return (
-    <div className="author-list">
+    <div className="user-list">
       <table className="table table-hover">
         <thead>
           <tr>
@@ -51,11 +51,11 @@ const AuthorList = (props) => {
           </tr>
         </thead>
         <tbody>
-          {authorItems}
+          {userItems}
         </tbody>
       </table>
     </div>
   );
 }
 
-export default AuthorList;
+export default UserList;

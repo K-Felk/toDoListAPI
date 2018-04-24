@@ -5,7 +5,7 @@ const Footer = (props) => {
     <div id="blogfooter">
       <hr />
       <footer>
-        <p>&copy; 2018 Bees R Us, LLC.</p>
+        <p>&copy; 2018 Kyle Felker, LLC.</p>
       </footer>
     </div>
   );

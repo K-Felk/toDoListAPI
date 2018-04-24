@@ -1,6 +1,6 @@
 import React from 'react';
 
-class AuthorForm extends React.Component {
+class UserForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -42,12 +42,12 @@ class AuthorForm extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-      if (newProps.author != null) {
+      if (newProps.user != null) {
         this.setState({
-          fname: newProps.author.fname,
-          lname: newProps.author.lname,
-          email: newProps.author.email,
-          id: newProps.author.id,
+          fname: newProps.user.fname,
+          lname: newProps.user.lname,
+          email: newProps.user.email,
+          id: newProps.user.id,
         });
       }
   }
@@ -69,8 +69,8 @@ class AuthorForm extends React.Component {
 
   render()  {
     return (
-      <div className="author-form">
-        <h1> Authors </h1>
+      <div className="user-form">
+        <h1> Users </h1>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label>First Name</label>
@@ -91,4 +91,4 @@ class AuthorForm extends React.Component {
   }
 }
 
-export default AuthorForm;
+export default UserForm;
