@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Users from './components/users';
-import Bugs from './components/bugs';
-import BugForm from './components/bug_form';
+import Tasks from './components/tasks'
+import TaskForm from './components/task_form'
+import Projects from './components/projects'
 import Home from './components/home';
 import About from './components/about';
 import TopNav from './components/top_nav';
@@ -18,9 +19,11 @@ ReactDOM.render(
     <div>
       <TopNav />
       <Switch>
-        <Route path="/users/:id/bugs/create" component={BugForm} />
-        <Route path="/users/:id/bugs/:pid" component={BugForm} />
-        <Route path="/users/:id/bugs" component={Bugs} />
+        <Route path="/projects/:project_id/tasks/create" component={TaskForm} />
+        
+        <Route path="/projects/:project_id/tasks" component={Tasks} />
+        <Route path="/projects" component={Projects} />
+        <Route path="/users/:user_id/tasks/" component={Tasks} />
         <Route path="/users" component={Users} />
         <Route path="/about" component={About} />
         <Route path="/" component={Home} />

@@ -2,7 +2,7 @@ import React from 'react';
 import UserForm from './user_form';
 import UserList from './user_list';
 import axios from 'axios';
-const API_BASE = "https://bugtracker-api.herokuapp.com/";
+const API_BASE = "https://todolistapi20.herokuapp.com";
 
 class Users extends React.Component {
 
@@ -11,7 +11,7 @@ class Users extends React.Component {
     this.state = {
       users: [],
       formMode: "new",
-      user: {lname:"", fname:"", email:""}
+      user: {lname:"", fname:"", email:"", position:""}
     };
     this.loadUsers = this.loadUsers.bind(this);
     this.removeUser = this.removeUser.bind(this);
@@ -40,7 +40,7 @@ class Users extends React.Component {
   clearForm()
   {
     console.log("clear form");
-    this.updateForm("new",{fname:"",lname:"",email:""});
+    this.updateForm("new",{fname:"",lname:"",email:"",position:""});
   }
 
   formSubmitted(user) {

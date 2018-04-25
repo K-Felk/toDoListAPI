@@ -9,7 +9,7 @@ const TopNav  = (props) =>  {
         <Navbar.Header>
           <Navbar.Brand>
             <LinkContainer to="/">
-              <a href="/"> Bugtracker </a>
+              <a href="/"> Projects </a>
             </LinkContainer>
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -19,6 +19,11 @@ const TopNav  = (props) =>  {
             <LinkContainer to="/users">
               <NavItem eventKey={2}>
                 Users
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to="/projects">
+              <NavItem eventKey={2}>
+                Projects
               </NavItem>
             </LinkContainer>
             <LinkContainer to="/about">

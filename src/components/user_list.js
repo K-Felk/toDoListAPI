@@ -7,6 +7,7 @@ const UserListItem  = (props) =>  {
       <td className="col-md-3">{props.fname}</td>
       <td className="col-md-3">{props.lname}</td>
       <td className="col-md-3">{props.email}</td>
+      <td className="col-md-3">{props.position}</td>
       <td className="col-md-3 btn-toolbar">
         <Link to={`/users/${props.id}/bugs`}>
         <button className="btn btn-success btn-sm">
@@ -31,6 +32,7 @@ const UserList = (props) => {
         fname={user.fname}
         lname={user.lname}
         email={user.email}
+        position={user.position}
         id={user.id}
         key={user.id}
         onDelete={props.onDelete}
@@ -47,6 +49,7 @@ const UserList = (props) => {
             <th className="col-md-3">First Name</th>
             <th className="col-md-3">Last Name</th>
             <th className="col-md-3">Email</th>
+            <th className="col-md-3">Position</th>
             <th className="col-md-3">Actions</th>
           </tr>
         </thead>

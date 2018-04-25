@@ -8,6 +8,7 @@ class UserForm extends React.Component {
       fname: "",
       lname: "",
       email:  "",
+      position: "",
       id: 0
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -30,6 +31,7 @@ class UserForm extends React.Component {
       fname: this.state.fname,
       lname: this.state.lname,
       email: this.state.email,
+      position: this.state.position,
       id: this.state.id,
     });
     event.preventDefault();
@@ -47,6 +49,7 @@ class UserForm extends React.Component {
           fname: newProps.user.fname,
           lname: newProps.user.lname,
           email: newProps.user.email,
+          position: newProps.user.position,
           id: newProps.user.id,
         });
       }
@@ -83,6 +86,10 @@ class UserForm extends React.Component {
           <div className="form-group">
             <label htmlFor="email">Email address</label>
             <input type="email" className="form-control" autoComplete='email' name="email"  id="email" placeholder="name@example.com" value={this.state.email} onChange={this.handleInputChange}/>
+          </div>
+          <div className="form-group">
+            <label htmlFor="position">Position Title</label>
+            <input type="position" className="form-control" autoComplete='position' name="position"  id="position" placeholder="position title" value={this.state.position} onChange={this.handleInputChange}/>
           </div>
           {this.renderButtons()}
         </form>
