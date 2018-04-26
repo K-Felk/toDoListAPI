@@ -1,41 +1,77 @@
 import React from 'react';
 import axios from 'axios';
+//use the utils module so we can dump the actual ojbects to console for debugging
+import util from 'util';
 
-//const API_BASE = 'http://localhost:3000/';
+
 const API_BASE = "https://todolistapi20.herokuapp.com";
+const UserDropDownItem = (props) => {
+  return (
+  <option value={props.value}>{props.lname} , {props.fname}</option>
+)}
+
+
+const UserList = (props) => {
+  const userItems = props.users.map((user)  => {
+    return (
+      
+       <UserDropDownItem
+          key={user.id}
+          value={user.id}
+          lname={user.lname}
+          fname={user.fname}
+       />
+        
+      )
+    });
+  
+  return (
+    userItems
+
+  )
+  
+}
 
 class TaskForm extends React.Component {
-
+  
   constructor(props) {
-
-    const id = props.match.params.id;
+    
+    
+    
+    const project_id = props.match.params.project_id;
     const createMode = (props.match.path.endsWith("create")) ? true: false;
     super(props);
     this.state = {
       name: "",
       description: "",
       notes: "",
-      priority: "1",
-      status: "0",
-      user_id: "0",
+      urgency: "1",
+      user_id: "",
       dueDate: "",
-      project_id: id,
-      bug_id: createMode ? 0 : props.match.params.pid,
-      createMode: createMode
+      project_id: project_id,
+      task_id: createMode ? 0 : props.match.params.task_id,
+      createMode: createMode,
+      users: []
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.loadData = this.loadData.bind(this)
+
+    
+    
 
     // load the post if are editing.
     if (!createMode) {
+      
+      
       axios
       .get(`${API_BASE}/projects/${this.state.project_id}/tasks/${this.state.task_id}`)
       .then(res => {
-        console.log("post fetched");
+        console.log("task fetched" + util.inspect(res.data));
         
-        var priority_array = {low:"0",medium:"1",high:"2"};
+        var urgency_array = {low:"0",medium:"1",high:"2"};
         
 
         this.setState({
@@ -43,7 +79,45 @@ class TaskForm extends React.Component {
           description: res.data.description,
           notes: res.data.notes,
           dueDate: res.data.dueDate,
-          priority: priority_array[res.data.priority],
+          urgency: urgency_array[res.data.urgency],
+          user_id: res.data.user_id
+        })
+      })
+      .catch(err => console.log(err));
+    }
+  }
+  componentDidMount() {
+    this.loadData()
+  }
+
+  loadData() {
+    axios
+    .get(`${API_BASE}/users`)
+    .then(res => {
+      console.log("user data: " + util.inspect(res.data));
+      this.setState({users: res.data})
+    }).catch(err => console.log(err));
+    console.log("state data: " + util.inspect(this.state.users));
+
+
+    // load the post if are editing.
+    if (!this.state.createMode) {
+      
+      
+      axios
+      .get(`${API_BASE}/projects/${this.state.project_id}/tasks/${this.state.task_id}`)
+      .then(res => {
+        console.log("task fetched" + util.inspect(res.data));
+        
+        var urgency_array = {low:"0",medium:"1",high:"2"};
+        
+
+        this.setState({
+          name: res.data.name,
+          description: res.data.description,
+          notes: res.data.notes,
+          dueDate: res.data.dueDate,
+          urgency: urgency_array[res.data.urgency],
           user_id: res.data.user_id
         })
       })
@@ -51,7 +125,9 @@ class TaskForm extends React.Component {
     }
   }
 
-  addBug(newTask) {
+  
+
+  addTask(newTask) {
     console.log(`posting task with name ${newTask.name}`);
     axios
     .post(`${API_BASE}/projects/${newTask.project_id}/tasks`, newTask)
@@ -63,6 +139,7 @@ class TaskForm extends React.Component {
     .catch(err => console.log(err));
   }
 
+  
   updateTask(task) {
     axios
     .put(`${API_BASE}/projects/${task.project_id}/tasks/${task.task_id}`, task)
@@ -71,6 +148,7 @@ class TaskForm extends React.Component {
     })
     .catch(err => console.log(err));
   }
+
 
   handleInputChange(event) {
     const target = event.target;
@@ -89,7 +167,7 @@ class TaskForm extends React.Component {
       project_id: this.state.project_id,
       user_id: this.state.user_id,
       task_id: this.state.task_id,
-      priority: this.state.priority,
+      urgency: this.state.urgency,
       notes: this.state.notes,
       dueDate: this.state.dueDate
     }
@@ -118,25 +196,29 @@ class TaskForm extends React.Component {
          <form onSubmit={this.handleSubmit}>
            
          <div className="form-group">
-             <label>User</label>
-             <input type="text" className="form-control" name="user" id="user" value={this.state.user_id} onChange={this.handleInputChange}/>
+             <label htmlFor="user">User</label>
+             <select className="form-control" name="user" id="user" value={this.state.user_id} onChange={this.handleInputChange}>
+                <UserList users={this.state.users}/>
+              </select>
+            
+            
            </div>
            <div className="form-group">
              <label htmlFor="description">Description</label>
-             <textarea className="form-control" name="description" id="description" value={this.state.description} onChange={this.handleInputChange} rows="6"></textarea>
+             <textarea className="form-control" placeholder="Describe your task" name="description" id="description" value={this.state.description} onChange={this.handleInputChange} rows="6"></textarea>
            </div>
            <div className="form-group">
              <label htmlFor="notes">Notes</label>
-             <textarea className="form-control" name="notes" id="notes" value={this.state.notes} onChange={this.handleInputChange} rows="6"></textarea>
+             <textarea className="form-control" placeholder="" name="notes" id="notes" value={this.state.notes} onChange={this.handleInputChange} rows="6"></textarea>
            </div>
            <div className="form-group">
             <label htmlFor="dueDate">Due Date</label>
-            <input type="date" className="form-control" autoComplete='date' name="dueDate"  id="dueDate" value={this.state.dueDate} onChange={this.handleInputChange}/>
+            <input type="date" className="form-control" name="dueDate"  id="dueDate" value={this.state.dueDate} onChange={this.handleInputChange}/>
           </div>
            <div className="form-group">
              
-            <label htmlFor="priority">Priority</label>
-             <select className="form-control" name="priority" id="priority" value={this.state.priority} onChange={this.handleInputChange}>
+            <label htmlFor="priority">Urgency</label>
+             <select className="form-control" name="urgency" id="urgency" value={this.state.urgency} onChange={this.handleInputChange}>
             <option value="0">Low</option>
             <option value="1">Medium</option>
             <option value="2">High</option>

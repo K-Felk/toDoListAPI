@@ -14,12 +14,9 @@ const TaskItem  = (props) =>  {
       <td className="col-md-3">{props.urgency}</td>
       <td className="col-md-3">{props.notes}</td>
       <td className="col-md-3">{props.dueDate}</td>
-      
-      <td className="col-md-3">{props.user_id}</td>
-      <td className="col-md-3">{props.project_id}</td>
-      
+  
       <td className="col-md-3 btn-toolbar">
-        <Link to={`/projects/${props.project_id}/tasks/${props.id}`}>
+        <Link to={`/projects/${props.project_id}/tasks/${props.task_id}`}>
             <button className="btn btn-success btn-sm">
               <i className="glyphicon glyphicon-pencil"></i> Edit
             </button>
@@ -38,26 +35,38 @@ class Tasks extends React.Component {
     super(props);
     const user_id = props.match.params.user_id;
     const project_id = props.match.params.project_id;
-
     this.state = {
       tasks: [],
       project_id: project_id,
-      projects: [],
-      users: [],
-      user_id: user_id
+      project: {},
+      user: {},
+      user_id: user_id,
+      calledFrom: (typeof project_id === "undefined") ? "user" : "project"
     };
 
     this.loadTasks = this.loadTasks.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
+    this.IDString = this.IDString.bind(this);
+    
+
   }
 
+  
+
   loadTasks() {
-    if (typeof this.state.user_id === "undefined") {
+    if (this.state.calledFrom === "project") {
       axios
       .get(`${API_BASE}/projects/${this.state.project_id}/tasks`)
       .then(res => {
         this.setState({ tasks: res.data });
         console.log(`Task Data loaded! = ${this.state.tasks}`)
+      })
+      .catch(err => console.log(err));
+      axios
+      .get(`${API_BASE}/projects/${this.state.project_id}`)
+      .then(res => {
+        this.setState({ project: res.data });
+        console.log(`Project Data loaded! = ${this.state.project}`)
       })
       .catch(err => console.log(err));
     } else {
@@ -68,23 +77,18 @@ class Tasks extends React.Component {
         console.log(`Task Data loaded! = ${this.state.tasks}`)
       })
       .catch(err => console.log(err));
+      axios
+      .get(`${API_BASE}/users/${this.state.user_id}`)
+      .then(res => {
+        this.setState({ user: res.data });
+        console.log(`user Data loaded! = ${this.state.user}`)
+      })
+      .catch(err => console.log(err));
     }
+    
 
-    axios
-    .get(`${API_BASE}/projects/`)
-    .then(res => {
-      this.setState({ projects: res.data });
-      console.log(`Project Data loaded! = ${this.state.projects}`)
-    })
-    .catch(err => console.log(err));
-
-    axios
-    .get(`${API_BASE}/users/`)
-    .then(res => {
-      this.setState({ users: res.data });
-      console.log(`User Data loaded! = ${this.state.users}`)
-    })
-    .catch(err => console.log(err));
+    
+    
   }
 
   deleteTask(id) {
@@ -103,9 +107,23 @@ class Tasks extends React.Component {
     this.loadTasks();
   }
 
+  IDString() {
+    var string
+    
+    if (this.state.calledFrom === "user") {
+      
+      string = this.state.user.lname + " , " + this.state.user.fname
+    } else {
+      string = this.state.project.name 
+    }
+    return string
+  }
+
   render() {
+    
 
     const taskItems = this.state.tasks.map((task)  => {
+      
       return (
         <TaskItem
           name={task.name}
@@ -115,21 +133,18 @@ class Tasks extends React.Component {
           urgency={task.urgency}
           notes={task.notes}
           dueDate={task.dueDate}
-          user_id={task.user_id}
-          project_id={task.project_id}
-          id={task.id}
+          task_id={task.id}
           key={task.id}
           onDelete={this.deleteTask}
+          project_id = {task.project_id}
+          
         />
       )
     });
-
-    const user_project = (typeof this.state.user_id === "undefined") 
-      ? "Project" : "User"
     
 
     const headerString = (this.state.tasks.count === 0)
-      ? "Loading..." : `tasks attached to ` + user_project
+      ? "Loading..." : `tasks attached to ` + this.IDString()
     return (
       <div className="tasks">
         <h1> {headerString} </h1>
@@ -144,9 +159,6 @@ class Tasks extends React.Component {
                 <th className="col-md-3">Urgency</th>
                 <th className="col-md-3">Notes</th>
                 <th className="col-md-3">Due Date</th>
-                
-                <th className="col-md-3">Assigned to</th>
-                <th className="col-md-3">Project</th>
                 <th className="col-md-3">Actions</th>
 
               </tr>
@@ -155,6 +167,7 @@ class Tasks extends React.Component {
               {taskItems}
             </tbody>
           </table>
+          
           <Link to={`/projects/${this.state.project_id}/tasks/create`}>
               <button className="btn btn-success btn-sm">
                 <i className="glyphicon glyphicon-plus"></i> Create Task

@@ -53,11 +53,13 @@ class Users extends React.Component {
   }
 
   loadUsers() {
+    //using the utils module to log the entire ojbect as a string to the console for debugging
+    var util = require('util')
     axios
     .get(`${API_BASE}/users`)
     .then(res => {
       this.setState({ users: res.data });
-      console.log(`Data loaded! = ${this.state.users}`)
+      console.log("User Data loaded! = " + util.inspect(this.state.users))
     })
     .catch(err => console.log(err));
   }

@@ -9,9 +9,9 @@ const UserListItem  = (props) =>  {
       <td className="col-md-3">{props.email}</td>
       <td className="col-md-3">{props.position}</td>
       <td className="col-md-3 btn-toolbar">
-        <Link to={`/users/${props.id}/bugs`}>
+        <Link to={`/users/${props.id}/tasks`}>
         <button className="btn btn-success btn-sm">
-          <i className="glyphicon glyphicon-list"></i> Bugs
+          <i className="glyphicon glyphicon-list"></i> Tasks
         </button>
       </Link>
       <button className="btn btn-success btn-sm" onClick={event => props.onEdit("edit",props)}>

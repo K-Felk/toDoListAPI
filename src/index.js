@@ -21,7 +21,9 @@ ReactDOM.render(
       <Switch>
         <Route path="/projects/:project_id/tasks/create" component={TaskForm} />
         
-        <Route path="/projects/:project_id/tasks" component={Tasks} />
+        <Route path="/projects/:project_id/tasks/:task_id" component={TaskForm} />
+        <Route path="/projects/:project_id/tasks/" component={Tasks} />
+
         <Route path="/projects" component={Projects} />
         <Route path="/users/:user_id/tasks/" component={Tasks} />
         <Route path="/users" component={Users} />
