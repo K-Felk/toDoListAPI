@@ -128,7 +128,7 @@ class TaskForm extends React.Component {
   
 
   addTask(newTask) {
-    console.log(`posting task with name ${newTask.name}`);
+    console.log("posting task with " + util.inspect(newTask));
     axios
     .post(`${API_BASE}/projects/${newTask.project_id}/tasks`, newTask)
     .then(res => {
@@ -200,7 +200,10 @@ class TaskForm extends React.Component {
              <select className="form-control" name="user" id="user" value={this.state.user_id} onChange={this.handleInputChange}>
                 <UserList users={this.state.users}/>
               </select>
-            
+              <div className="form-group">
+             <label htmlFor="name">name</label>
+             <input type="text" className="form-control" placeholder="task name" name="name" id="name" value={this.state.name} onChange={this.handleInputChange}/>
+           </div>
             
            </div>
            <div className="form-group">
@@ -227,7 +230,7 @@ class TaskForm extends React.Component {
            </div>
 
            <div className="form-group">
-             <button type="submit" className="btn btn-primary"onClick={this.handleSubmit}>{this.state.createMode ? "Create" : "Save"}</button>
+             <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>{this.state.createMode ? "Create" : "Save"}</button>
              <button type="submit" className="btn btn-danger" onClick={this.handleCancel} >Cancel</button>
            </div>
          </form>
