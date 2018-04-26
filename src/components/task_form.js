@@ -227,7 +227,7 @@ class TaskForm extends React.Component {
            </div>
 
            <div className="form-group">
-             <button type="submit" className="btn btn-primary"onClick={this.state.handleSubmit}>{this.state.createMode ? "Create" : "Save"}</button>
+             <button type="submit" className="btn btn-primary"onClick={this.handleSubmit}>{this.state.createMode ? "Create" : "Save"}</button>
              <button type="submit" className="btn btn-danger" onClick={this.handleCancel} >Cancel</button>
            </div>
          </form>
